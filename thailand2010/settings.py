@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'thailand2010.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd9scj8oe43gjhd',
+        'HOST': 'ec2-107-20-104-234.compute-1.amazonaws.com',
+        'USER': 'dalzwahyqnfnrh',
+        'PASSWORD': 'af7887c7a9c06d4ad1350710bf97dc9f28f4c9f3a84b72de47d7b0d2cdfc6f0',
+        'PORT': 5432,
     }
 }
 
