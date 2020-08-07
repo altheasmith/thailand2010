@@ -21,8 +21,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('people', story_views.all_people, name='people'),
     path('institutions', story_views.all_institutions, name='institutions'),
+    path('events', story_views.all_events, name='events'),
     path('person/<int:person_id>', story_views.person, name='person'),
     path('person-detail/<int:person_detail_id>', story_views.person_detail, name='person-detail'),
     path('institution/<int:institution_id>', story_views.institution, name='institution'),
     path('institution-detail/<int:institution_detail_id>', story_views.institution_detail, name='institution-detail'),
+    path('event/<int:event_id>', story_views.event, name='event'),
 ]

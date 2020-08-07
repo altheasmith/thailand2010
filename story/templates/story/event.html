@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>{{ event.name }}</h3>
+
+{% if event.details %}
+<p>
+   {{event.details}}
+</p>
+{% endif %}
+
+
+{% if event.date %}
+<p>
+   {{event.date}}
+</p>
+{% endif %}
+
+
+{% if details %}
+<p>details:</p>
+<ul>
+    {% for detail in details %}
+    <li><a href="/person-detail/{{ detail.id }}">{{ detail.details }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
