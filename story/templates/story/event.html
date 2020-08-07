@@ -17,12 +17,37 @@
 {% endif %}
 
 
-{% if details %}
-<p>details:</p>
+{% if institution_data %}
+<p>institutions:</p>
 <ul>
-    {% for detail in details %}
-    <li><a href="/person-detail/{{ detail.id }}">{{ detail.details }}</a></li>
+    {% for institution, all_details in institution_data.items %}
+    <li><a href="/institution/{{ institution.id }}">{{institution.name }}</a>
+        {% if all_details %}
+        <ul>
+            {% for institution_detail in all_details %}
+            <li><a href="/institution-detail/{{ institution_detail.id }}">{{ institution_detail.details }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     {% endfor %}
 </ul>
 {% endif %}
+
+{% if person_data %}
+<p>people:</p>
+<ul>
+    {% for person, all_details in person_data.items %}
+    <li><a href="/person/{{ person.id }}">{{person.name }}</a>
+        {% if all_details %}
+        <ul>
+            {% for person_detail in all_details %}
+            <li><a href="/person-detail/{{ person_detail.id }}">{{ person_detail.details }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+
 {% endblock %}

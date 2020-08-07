@@ -46,7 +46,10 @@ class PersonAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     search_fields = ('name', 'details', 'date')
-    list_display = ('name', 'details', 'date_str', 'date')
+    list_display = ('name', 'details', 'date_str', 'date', 'tagged_person_details_string', 'tagged_persons_string',
+                    'tagged_institution_details_string', 'tagged_institutions_string')
+    raw_id_fields = ('tagged_persons', 'tagged_institutions')
+    readonly_fields = ('tagged_person_details_string', 'tagged_institution_details_string')
 
 
 class InstitutionDetailInline(admin.TabularInline):

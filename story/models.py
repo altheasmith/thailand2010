@@ -66,7 +66,7 @@ class AffiliationStatus(models.Model):
 
 
 class InstitutionAffiliation(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='affiliations')
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     title = models.CharField(max_length=512, blank=True, null=True)
     status = models.ForeignKey(AffiliationStatus, on_delete=models.SET_NULL, blank=True, null=True)
@@ -85,7 +85,7 @@ class PoliticalPartyAffiliation(InstitutionAffiliation):
 
 
 class Title(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='titles')
     title = models.CharField(max_length=512)
     details = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -100,11 +100,30 @@ class Event(models.Model):
     details = models.TextField()
     date_str = models.TextField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
+    tagged_persons = models.ManyToManyField(Person, blank=True, related_name='tagged_events')
+    tagged_institutions = models.ManyToManyField(Institution, blank=True, related_name='tagged_institutions')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+
+    def tagged_person_details_string(self):
+        return ', '.join(p.person.name for p in self.tagged_person_details.all())
+
+    def tagged_persons_string(self):
+        return ', '.join(p.name for p in self.tagged_persons.all())
+
+    # def tagged_events_string(self):
+    #     return ', '.join(e.name for e in self.tagged_events.all())
+
+    def tagged_institution_details_string(self):
+        return ', '.join(str(i.institution) for i in self.tagged_institution_details.all())
+
+    def tagged_institutions_string(self):
+        return ', '.join(str(i) for i in self.tagged_institutions.all())
+
+
 
 
 class PersonDetail(models.Model):

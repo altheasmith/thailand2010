@@ -22,8 +22,16 @@ def person(request, person_id):
         details = person.details.all()
     except Person.DoesNotExist:
         raise Http404("Person does not exist")
+    person_details = person.tagged_person_details.all()
+    people = Person.objects.filter(pk__in=person_details.values_list('person_id', flat=True))
+    person_data = {p: person_details.filter(person=p) for p in people}
+    institution_details = person.tagged_institution_details.all()
+    institutions = Institution.objects.filter(pk__in=institution_details.values_list('institution_id', flat=True))
+    institution_data = {i: institution_details.filter(institution=i) for i in institutions}
     return render(request, 'story/person.html', {'person': person,
                                                'details': details,
+                                                 'person_data': person_data,
+                                                 'institution_data': institution_data
                                                  })
 
 
@@ -35,14 +43,23 @@ def person_detail(request, person_detail_id):
     return render(request, 'story/person-detail.html', {'detail': person_detail,
                                                         })
 
+
 def institution(request, institution_id):
     try:
         institution = Institution.objects.get(pk=institution_id)
         details = institution.details.all()
     except Person.DoesNotExist:
         raise Http404("Institution does not exist")
+    person_details = institution.tagged_person_details.all()
+    people = Person.objects.filter(pk__in=person_details.values_list('person_id', flat=True))
+    person_data = {p: person_details.filter(person=p) for p in people}
+    institution_details = institution.tagged_institution_details.all()
+    institutions = Institution.objects.filter(pk__in=institution_details.values_list('institution_id', flat=True))
+    institution_data = {i: institution_details.filter(institution=i) for i in institutions}
     return render(request, 'story/institution.html', {'institution': institution,
                                                       'details': details,
+                                                      'person_data': person_data,
+                                                      'institution_data': institution_data,
                                                       })
 
 
@@ -61,6 +78,14 @@ def event(request, event_id):
         # details = institution.details.all()
     except Event.DoesNotExist:
         raise Http404("Event does not exist")
+    person_details = event.tagged_person_details.all()
+    persons = Person.objects.filter(pk__in=person_details.values_list('person_id', flat=True)) | event.tagged_persons.all()
+    person_data = {p: person_details.filter(person=p) for p in persons}
+    institution_details = event.tagged_institution_details.all()
+    institutions = Institution.objects.filter(pk__in=institution_details.values_list('institution_id', flat=True)) | event.tagged_institutions.all()
+    institution_data = {i: institution_details.filter(institution=i) for i in institutions}
     return render(request, 'story/event.html', {'event': event,
+                                                'person_data': person_data,
+                                                'institution_data': institution_data
                                                       # 'details': details,
                                                       })

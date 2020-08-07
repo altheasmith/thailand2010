@@ -3,6 +3,15 @@
 {% block content %}
 <h3>{{ person.name }}</h3>
 
+{% if person.titles.exists %}
+<p>titles:</p>
+<ul>
+    {% for title in person.titles.all %}
+    <li>{{ title.title }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% if details %}
 <p>details:</p>
 <ul>
@@ -11,4 +20,46 @@
     {% endfor %}
 </ul>
 {% endif %}
+
+{% if person.affiliations.exists %}
+<p>affiliations:</p>
+<ul>
+    {% for affiliation in person.affiliations.all %}
+    <li><a href="/institution/{{ affiliation.institution.id }}">{{ affiliation.institution }}</a>{% if affiliation.title %}: {{affiliation.title}}{% endif %}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if institution_data %}
+<p>institutions:</p>
+<ul>
+    {% for institution, all_details in institution_data.items %}
+    <li><a href="/institution/{{ institution.id }}">{{institution.name }}</a>
+        {% if all_details %}
+        <ul>
+            {% for institution_detail in all_details %}
+            <li><a href="/institution-detail/{{ institution_detail.id }}">{{ institution_detail.details }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if person_data %}
+<p>people:</p>
+<ul>
+    {% for person, all_details in person_data.items %}
+    <li><a href="/person/{{ person.id }}">{{person.name }}</a>
+        {% if all_details %}
+        <ul>
+            {% for person_detail in all_details %}
+            <li><a href="/person-detail/{{ person_detail.id }}">{{ person_detail.details }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}

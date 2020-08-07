@@ -11,7 +11,7 @@
 <p>institutions:</p>
 <ul>
     {% for institution in detail.tagged_institutions.all %}
-    <li><a href="/institution/{{ detail.id }}">{{ institution.name }}</a></li>
+    <li><a href="/institution/{{ institution.id }}">{{ institution.name }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
@@ -20,13 +20,13 @@
 <p>events:</p>
 <ul>
     {% for event in detail.tagged_events.all %}
-    <li><a href="/institution/{{ detail.id }}">{{ event.name }}</a></li>
+    <li><a href="/event/{{ event.id }}">{{ event.name }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
 
 {% if detail.tagged_persons.exists %}
-<p>persons:</p>
+<p>people:</p>
 <ul>
     {% for person in detail.tagged_persons.all %}
     <li><a href="/person/{{ person.id }}">{{ person.name }}</a></li>
