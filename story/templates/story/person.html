@@ -16,7 +16,26 @@
 <p>details:</p>
 <ul>
     {% for detail in details %}
-    <li><a href="/person-detail/{{ detail.id }}">{{ detail.details }}</a></li>
+    <li>
+        <a href="/person-detail/{{ detail.id }}">{{ detail.details }}</a><br/>
+        {% if detail.tagged_institutions.exists %}
+            {% for institution in detail.tagged_institutions.all %}
+                <span class="badge badge-info"><a href="/event/{{ event.id }}" style="color:#FFFFFF;">{{ institution.name }}</a></span>
+            {% endfor %}
+        {% endif %}
+
+        {% if detail.tagged_events.exists %}
+            {% for event in detail.tagged_events.all %}
+                <span class="badge badge-success"><a href="/event/{{ event.id }}" style="color:#FFFFFF;">{{ event.name }}</a></span>
+            {% endfor %}
+        {% endif %}
+
+        {% if detail.tagged_persons.exists %}
+            {% for person in detail.tagged_persons.all %}
+                <span class="badge badge-secondary"><a href="/person/{{ person.id }}" style="color:#FFFFFF;">{{ person.name }}</a></span>
+            {% endfor %}
+        {% endif %}
+    </li>
     {% endfor %}
 </ul>
 {% endif %}
