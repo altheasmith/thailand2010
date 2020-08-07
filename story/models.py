@@ -1,0 +1,181 @@
+from django.db import models
+
+
+class Institution(models.Model):
+    name = models.CharField(max_length=256)
+    acronym = models.CharField(max_length=10, blank=True, null=True)
+    political_party = models.BooleanField(default=False)
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class PoliticalParty(Institution):
+    class Meta:
+        proxy = True
+        verbose_name_plural = 'Political parties'
+
+
+class Person(models.Model):
+    name = models.CharField(max_length=256)
+    alias = models.CharField(max_length=256, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'People'
+
+
+class AffiliationStatus(models.Model):
+    name = models.CharField(max_length=256)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Affiliation statuses'
+
+
+class InstitutionAffiliation(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    title = models.CharField(max_length=512, blank=True, null=True)
+    status = models.ForeignKey(AffiliationStatus, on_delete=models.SET_NULL, blank=True, null=True)
+    details = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.person.name} - {self.institution.name}'
+
+
+class PoliticalPartyAffiliation(InstitutionAffiliation):
+
+    class Meta:
+        proxy = True
+
+
+class Title(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    title = models.CharField(max_length=512)
+    details = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.person.name} - {self.title}'
+
+
+class Event(models.Model):
+    name = models.CharField(max_length=256)
+    details = models.TextField()
+    date_str = models.TextField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class PersonDetail(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='subject')
+    details = models.TextField()
+    tagged_persons = models.ManyToManyField(Person, blank=True)
+    tagged_events = models.ManyToManyField(Event, blank=True)
+    tagged_institutions = models.ManyToManyField(Institution, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.person.name} - {self.details[:48]}'
+
+    def tagged_persons_string(self):
+        return ', '.join(p.name for p in self.tagged_persons.all())
+
+    def tagged_events_string(self):
+        return ', '.join(e.name for e in self.tagged_events.all())
+
+    def tagged_institutions_string(self):
+        return ', '.join(str(i) for i in self.tagged_institutions.all())
+
+
+class InstitutionDetail(models.Model):
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='subject')
+    details = models.TextField()
+    tagged_persons = models.ManyToManyField(Person, blank=True)
+    tagged_events = models.ManyToManyField(Event, blank=True)
+    tagged_institutions = models.ManyToManyField(Institution, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.institution.name} - {self.details[:48]}'
+
+    def tagged_persons_string(self):
+        return ', '.join(p.name for p in self.tagged_persons.all())
+
+    def tagged_events_string(self):
+        return ', '.join(e.name for e in self.tagged_events.all())
+
+    def tagged_institutions_string(self):
+        return ', '.join(str(i) for i in self.tagged_institutions.all())
+
+
+class PoliticalPartyDetail(InstitutionDetail):
+    class Meta:
+        proxy = True
+
+
+
+
+
+
+
+
+
+class OldPoliticalParty(models.Model):
+    name = models.CharField(max_length=256)
+    acronym = models.CharField(max_length=10, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        dtr = self.name
+        if self.acronym:
+            dtr += f' ({self.acronym})'
+        return dtr
+
+    class Meta:
+        verbose_name_plural = 'Political parties'
+
+
+class PartyAffiliation(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    political_party = models.ForeignKey(OldPoliticalParty, on_delete=models.CASCADE)
+    title = models.CharField(max_length=512, blank=True, null=True)
+    status = models.ForeignKey(AffiliationStatus, on_delete=models.SET_NULL, blank=True, null=True)
+    details = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.person.name} - {self.political_party.name}'
+
+
+class PartyDetail(models.Model):
+    party = models.ForeignKey(OldPoliticalParty, on_delete=models.CASCADE)
+    details = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.party.name} - {self.details[:48]}'
