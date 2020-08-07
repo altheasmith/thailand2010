@@ -17,7 +17,7 @@
         <a href="/institution-detail/{{ detail.id }}">{{ detail.details }}</a><br/>
         {% if detail.tagged_institutions.exists %}
             {% for institution in detail.tagged_institutions.all %}
-                <span class="badge badge-info"><a href="/event/{{ event.id }}" style="color:#FFFFFF;">{{ institution.name }}</a></span>
+                <span class="badge badge-info"><a href="/institution/{{ institution.id }}" style="color:#FFFFFF;">{{ institution.name }}</a></span>
             {% endfor %}
         {% endif %}
 
