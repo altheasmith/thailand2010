@@ -1,9 +1,30 @@
 from django.db import models
 
 
+class Media(models.Model):
+    name = models.CharField(max_length=256)
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Place(models.Model):
+    name = models.CharField(max_length=256)
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Institution(models.Model):
     name = models.CharField(max_length=256)
     acronym = models.CharField(max_length=10, blank=True, null=True)
+    alias = models.CharField(max_length=256, blank=True, null=True)
     political_party = models.BooleanField(default=False)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -107,6 +128,12 @@ class PersonDetail(models.Model):
     def tagged_institutions_string(self):
         return ', '.join(str(i) for i in self.tagged_institutions.all())
 
+    def details_short(self):
+        return self.details[:30]
+
+    def name(self):
+        return self.person.name
+
 
 class InstitutionDetail(models.Model):
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='subject')
@@ -128,6 +155,12 @@ class InstitutionDetail(models.Model):
 
     def tagged_institutions_string(self):
         return ', '.join(str(i) for i in self.tagged_institutions.all())
+
+    def details_short(self):
+        return self.details[:30]
+
+    def name(self):
+        return self.institution.name
 
 
 class PoliticalPartyDetail(InstitutionDetail):
