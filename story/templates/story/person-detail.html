@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>{{ detail.person.name }}</h3>
+
+<p>
+    {{detail.details}}
+</p>
+
+{% if detail.tagged_institutions.exists %}
+<p>institutions:</p>
+<ul>
+    {% for institution in detail.tagged_institutions.all %}
+    <li><a href="/institution/{{ institution.id }}">{{ institution.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if detail.tagged_events.exists %}
+<p>events:</p>
+<ul>
+    {% for event in detail.tagged_events.all %}
+    <li><a href="/institution/{{ detail.id }}">{{ event.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if detail.tagged_persons.exists %}
+<p>persons:</p>
+<ul>
+    {% for person in detail.tagged_persons.all %}
+    <li><a href="/person/{{ person.id }}">{{ person.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

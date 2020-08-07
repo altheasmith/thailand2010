@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>{{ institution.name }}</h3>
+
+{% if institution.description %}
+<p>
+   {{institution.description}}
+</p>
+{% endif %}
+
+{% if details %}
+<p>details:</p>
+<ul>
+    {% for detail in details %}
+    <li><a href="/institution-detail/{{ detail.id }}">{{ detail.details }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

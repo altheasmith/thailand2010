@@ -108,11 +108,11 @@ class Event(models.Model):
 
 
 class PersonDetail(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='subject')
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='details')
     details = models.TextField()
-    tagged_persons = models.ManyToManyField(Person, blank=True)
-    tagged_events = models.ManyToManyField(Event, blank=True)
-    tagged_institutions = models.ManyToManyField(Institution, blank=True)
+    tagged_persons = models.ManyToManyField(Person, blank=True, related_name='tagged_person_details')
+    tagged_events = models.ManyToManyField(Event, blank=True, related_name='tagged_person_details')
+    tagged_institutions = models.ManyToManyField(Institution, blank=True, related_name='tagged_person_details')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -136,11 +136,11 @@ class PersonDetail(models.Model):
 
 
 class InstitutionDetail(models.Model):
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='subject')
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='details')
     details = models.TextField()
-    tagged_persons = models.ManyToManyField(Person, blank=True)
-    tagged_events = models.ManyToManyField(Event, blank=True)
-    tagged_institutions = models.ManyToManyField(Institution, blank=True)
+    tagged_persons = models.ManyToManyField(Person, blank=True, related_name='tagged_institution_details')
+    tagged_events = models.ManyToManyField(Event, blank=True, related_name='tagged_institution_details')
+    tagged_institutions = models.ManyToManyField(Institution, blank=True, related_name='tagged_institution_details')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
