@@ -4,7 +4,9 @@
 <h3>{{ profile }} people</h3>
 <ul>
     {% for person in people %}
-    <li><a href="/person/{{ person.id }}">{{ person.name }}</a></li>
+    <li>
+        <a href="/person/{{ person.id }}">{{ person.name }}</a> <span class="badge badge-light">{{person.total_connections}}</span>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}

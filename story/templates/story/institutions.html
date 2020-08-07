@@ -4,7 +4,9 @@
 <h3>{{ profile }} institutions</h3>
 <ul>
     {% for institution in institutions %}
-    <li><a href="/institution/{{ institution.id }}">{{ institution.name }}</a></li>
+    <li>
+        <a href="/institution/{{ institution.id }}">{{ institution.name }}</a><span class="badge badge-light">{{institution.total_connections}}</span>
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}
