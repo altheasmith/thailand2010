@@ -33,6 +33,37 @@ class Institution(models.Model):
     def __str__(self):
         return self.name
 
+    def connected_people(self):
+        person_details = self.tagged_person_details.all()
+        return Person.objects.filter(pk__in=person_details.values_list('person_id', flat=True))
+
+    def connected_people_count(self):
+        return self.connected_people().count()
+
+    def person_data(self):
+        person_details = self.tagged_person_details.all()
+        return {p: person_details.filter(person=p) for p in self.connected_people()}
+
+    def connected_institutions(self):
+        institution_details = self.tagged_institution_details.all()
+        return Institution.objects.filter(pk__in=institution_details.values_list('institution_id', flat=True))
+
+    def connected_institutions_count(self):
+        return self.connected_institutions().count()
+
+    def institution_data(self):
+        institution_details = self.tagged_institution_details.all()
+        return {i: institution_details.filter(institution=i) for i in self.connected_institutions()}
+
+    def connected_events(self):
+        return self.tagged_events.all()
+
+    def connected_events_count(self):
+        return self.connected_events().count()
+
+    def total_connections(self):
+        return self.connected_institutions_count() + self.connected_events_count() + self.connected_people_count()
+
 
 class PoliticalParty(Institution):
     class Meta:
@@ -51,6 +82,37 @@ class Person(models.Model):
 
     class Meta:
         verbose_name_plural = 'People'
+
+    def connected_people(self):
+        person_details = self.tagged_person_details.all()
+        return Person.objects.filter(pk__in=person_details.values_list('person_id', flat=True))
+
+    def connected_people_count(self):
+        return self.connected_people().count()
+
+    def person_data(self):
+        person_details = self.tagged_person_details.all()
+        return {p: person_details.filter(person=p) for p in self.connected_people()}
+
+    def connected_institutions(self):
+        institution_details = self.tagged_institution_details.all()
+        return Institution.objects.filter(pk__in=institution_details.values_list('institution_id', flat=True))
+
+    def connected_institutions_count(self):
+        return self.connected_institutions().count()
+
+    def institution_data(self):
+        institution_details = self.tagged_institution_details.all()
+        return {i: institution_details.filter(institution=i) for i in self.connected_institutions()}
+
+    def connected_events(self):
+        return self.tagged_events.all()
+
+    def connected_events_count(self):
+        return self.connected_events().count()
+
+    def total_connections(self):
+        return self.connected_institutions_count() + self.connected_events_count() + self.connected_people_count()
 
 
 class AffiliationStatus(models.Model):
@@ -101,7 +163,7 @@ class Event(models.Model):
     date_str = models.TextField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
     tagged_persons = models.ManyToManyField(Person, blank=True, related_name='tagged_events')
-    tagged_institutions = models.ManyToManyField(Institution, blank=True, related_name='tagged_institutions')
+    tagged_institutions = models.ManyToManyField(Institution, blank=True, related_name='tagged_events')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -123,7 +185,32 @@ class Event(models.Model):
     def tagged_institutions_string(self):
         return ', '.join(str(i) for i in self.tagged_institutions.all())
 
+    def connected_people(self):
+        person_details = self.tagged_person_details.all()
+        return Person.objects.filter(
+            pk__in=person_details.values_list('person_id', flat=True)) | self.tagged_persons.all()
 
+    def connected_people_count(self):
+        return self.connected_people().count()
+
+    def person_data(self):
+        person_details = self.tagged_person_details.all()
+        return {p: person_details.filter(person=p) for p in self.connected_people()}
+
+    def connected_institutions(self):
+        institution_details = self.tagged_institution_details.all()
+        return Institution.objects.filter(
+            pk__in=institution_details.values_list('institution_id', flat=True)) | self.tagged_institutions.all()
+
+    def connected_institutions_count(self):
+        return self.connected_institutions().count()
+
+    def institution_data(self):
+        institution_details = self.tagged_institution_details.all()
+        return {i: institution_details.filter(institution=i) for i in self.connected_institutions()}
+
+    def total_connections(self):
+        return self.connected_institutions_count() + self.connected_people_count()
 
 
 class PersonDetail(models.Model):

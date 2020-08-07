@@ -34,7 +34,7 @@
 <p>institutions:</p>
 <ul>
     {% for institution, all_details in institution_data.items %}
-    <li><a href="/institution/{{ institution.id }}">{{institution.name }}</a>
+    <li><a href="/institution/{{ institution.id }}">{{institution.name }}</a> <span class="badge badge-light">{{institution.total_connections}}</span>
         {% if all_details %}
         <ul>
             {% for institution_detail in all_details %}
@@ -50,7 +50,7 @@
 <p>people:</p>
 <ul>
     {% for person, all_details in person_data.items %}
-    <li><a href="/person/{{ person.id }}">{{person.name }}</a>
+    <li><a href="/person/{{ person.id }}">{{person.name }}</a> <span class="badge badge-light">{{person.total_connections}}</span>
         {% if all_details %}
         <ul>
             {% for person_detail in all_details %}
@@ -66,7 +66,7 @@
 <p>events:</p>
 <ul>
     {% for event in person.tagged_events.all %}
-    <li><a href="/event/{{ event.id }}">{{event.name}} - {{event.details }}</a>
+    <li><a href="/event/{{ event.id }}">{{event.name}} - {{event.details }}</a> <span class="badge badge-light">{{event.total_connections}}</span>
     {% endfor %}
 </ul>
 {% endif %}

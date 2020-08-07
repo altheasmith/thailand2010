@@ -11,6 +11,7 @@ def all_institutions(request):
     institutions = Institution.objects.all().order_by('name')
     return render(request, 'story/institutions.html', {'institutions': institutions})
 
+
 def all_events(request):
     events = Event.objects.all().order_by('date')
     return render(request, 'story/events.html', {'events': events})
@@ -22,16 +23,10 @@ def person(request, person_id):
         details = person.details.all()
     except Person.DoesNotExist:
         raise Http404("Person does not exist")
-    person_details = person.tagged_person_details.all()
-    people = Person.objects.filter(pk__in=person_details.values_list('person_id', flat=True))
-    person_data = {p: person_details.filter(person=p) for p in people}
-    institution_details = person.tagged_institution_details.all()
-    institutions = Institution.objects.filter(pk__in=institution_details.values_list('institution_id', flat=True))
-    institution_data = {i: institution_details.filter(institution=i) for i in institutions}
     return render(request, 'story/person.html', {'person': person,
                                                'details': details,
-                                                 'person_data': person_data,
-                                                 'institution_data': institution_data
+                                                 'person_data': person.person_data(),
+                                                 'institution_data': person.institution_data()
                                                  })
 
 
@@ -50,16 +45,10 @@ def institution(request, institution_id):
         details = institution.details.all()
     except Person.DoesNotExist:
         raise Http404("Institution does not exist")
-    person_details = institution.tagged_person_details.all()
-    people = Person.objects.filter(pk__in=person_details.values_list('person_id', flat=True))
-    person_data = {p: person_details.filter(person=p) for p in people}
-    institution_details = institution.tagged_institution_details.all()
-    institutions = Institution.objects.filter(pk__in=institution_details.values_list('institution_id', flat=True))
-    institution_data = {i: institution_details.filter(institution=i) for i in institutions}
     return render(request, 'story/institution.html', {'institution': institution,
                                                       'details': details,
-                                                      'person_data': person_data,
-                                                      'institution_data': institution_data,
+                                                      'person_data': institution.person_data(),
+                                                      'institution_data': institution.institution_data(),
                                                       })
 
 

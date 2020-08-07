@@ -11,7 +11,9 @@
 <p>institutions:</p>
 <ul>
     {% for institution in detail.tagged_institutions.all %}
-    <li><a href="/institution/{{ institution.id }}">{{ institution.name }}</a></li>
+    <li>
+        <a href="/institution/{{ institution.id }}">{{ institution.name }}</a> <span class="badge badge-light">{{institution.total_connections}}</span>
+    </li>
     {% endfor %}
 </ul>
 {% endif %}
@@ -20,7 +22,7 @@
 <p>events:</p>
 <ul>
     {% for event in detail.tagged_events.all %}
-    <li><a href="/event/{{ event.id }}">{{ event.name }}</a></li>
+    <li><a href="/event/{{ event.id }}">{{ event.name }}</a></li> <span class="badge badge-light">{{event.total_connections}}</span>
     {% endfor %}
 </ul>
 {% endif %}
@@ -29,7 +31,9 @@
 <p>people:</p>
 <ul>
     {% for person in detail.tagged_persons.all %}
-    <li><a href="/person/{{ person.id }}">{{ person.name }}</a></li>
+    <li>
+        <a href="/person/{{ person.id }}">{{ person.name }}</a> <span class="badge badge-light">{{person.total_connections}}</span>
+    </li>
     {% endfor %}
 </ul>
 {% endif %}
