@@ -62,4 +62,13 @@
 </ul>
 {% endif %}
 
+{% if person.tagged_events.exists %}
+<p>events:</p>
+<ul>
+    {% for event in person.tagged_events.all %}
+    <li><a href="/event/{{ event.id }}">{{event.name}} - {{event.details }}</a>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
