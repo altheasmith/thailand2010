@@ -1,19 +1,12 @@
 from django.contrib import admin
-from story.models import PoliticalParty, Person, PersonDetail, AffiliationStatus, PartyAffiliation, \
-    InstitutionAffiliation, Event, Institution, PartyDetail, Title, InstitutionDetail, PoliticalPartyAffiliation, \
+from story.models import PoliticalParty, Person, PersonDetail, AffiliationStatus, \
+    InstitutionAffiliation, Event, Institution, Title, InstitutionDetail, PoliticalPartyAffiliation, \
     PoliticalPartyDetail
 
-# Register your models here.
-# admin.site.register(PoliticalParty)
-# admin.site.register(PersonDetail)
-# admin.site.register(PartyAffiliation)
+
 admin.site.register(AffiliationStatus)
-# admin.site.register(Event)
-# admin.site.register(Institution)
 admin.site.register(InstitutionAffiliation)
-# admin.site.register(PartyDetail)
 admin.site.register(Title)
-# admin.site.register(InstitutionDetail)
 
 
 @admin.register(PersonDetail)

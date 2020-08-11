@@ -15,15 +15,17 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
+import os
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')$f4!8n!4(2*&ln%-x2pd1+xw4m81e!mdk8qqwc5f^d%wuk00s'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -77,10 +79,10 @@ WSGI_APPLICATION = 'thailand2010.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd9scj8oe43gjhd',
-        'HOST': 'ec2-107-20-104-234.compute-1.amazonaws.com',
-        'USER': 'dalzwahyqnfnrh',
-        'PASSWORD': '9af7887c7a9c06d4ad1350710bf97dc9f28f4c9f3a84b72de47d7b0d2cdfc6f0',
+        'NAME': os.getenv('DB_NAME'),
+        'HOST': os.getenv('DB_HOST'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
         'PORT': 5432,
     }
 }

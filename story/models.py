@@ -176,9 +176,6 @@ class Event(models.Model):
     def tagged_persons_string(self):
         return ', '.join(p.name for p in self.tagged_persons.all())
 
-    # def tagged_events_string(self):
-    #     return ', '.join(e.name for e in self.tagged_events.all())
-
     def tagged_institution_details_string(self):
         return ', '.join(str(i.institution) for i in self.tagged_institution_details.all())
 
@@ -272,49 +269,3 @@ class InstitutionDetail(models.Model):
 class PoliticalPartyDetail(InstitutionDetail):
     class Meta:
         proxy = True
-
-
-
-
-
-
-
-
-
-class OldPoliticalParty(models.Model):
-    name = models.CharField(max_length=256)
-    acronym = models.CharField(max_length=10, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        dtr = self.name
-        if self.acronym:
-            dtr += f' ({self.acronym})'
-        return dtr
-
-    class Meta:
-        verbose_name_plural = 'Political parties'
-
-
-class PartyAffiliation(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    political_party = models.ForeignKey(OldPoliticalParty, on_delete=models.CASCADE)
-    title = models.CharField(max_length=512, blank=True, null=True)
-    status = models.ForeignKey(AffiliationStatus, on_delete=models.SET_NULL, blank=True, null=True)
-    details = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.person.name} - {self.political_party.name}'
-
-
-class PartyDetail(models.Model):
-    party = models.ForeignKey(OldPoliticalParty, on_delete=models.CASCADE)
-    details = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.party.name} - {self.details[:48]}'
